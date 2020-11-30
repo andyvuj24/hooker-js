@@ -1,95 +1,95 @@
-# Hooker JS [![gitee.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNTQyMTMwNzVXcWZyU2dTbC5wbmc=&w=15)](https://gitee.com/HGJing/hooker-js) [![github.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNjU3NDkzMDkybWNLRXhHMi5wbmc=&w=15)](https://github.com/canguser/hooker-js)
+# Hooker JS [![gitee.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNTQyMTMwNzVXcWZyU2dTbC5wbmc=&winghooker-js-js/ ) [![github.png](https://palerock.cn/api-provider/files/view?identity=L2FydGljbGUvaW1hZ2UvMjAyMDA2MjkxNjU3NDkzMDkybWNLRXhHMi5wbmc=&w=15)](https://github.com/cang)
 
-> 用于劫持方法，对目标进行 AOP 切面操作  
-基于 ES5 语法，用于快速开发
+> Used for hijacking methods and performing AOP aspect operations
+on targets Based on ES5 syntax for rapid development
 
 ----------
 
-## 快速入门
+## Quick start
 
 ```javascript
 eHook.hookBefore(window,'alert',function(method,args){
-	args[0] = args[0] + '[被劫持的参数]';
+args[0] = args[0] +'[parameter hijacked]';
 });
-alert('hello eHook'); // hello eHook[被劫持的参数]
+alert('hello eHook'); // hello eHook[parameter hijacked]
 ```
 
-全局对象：`eHook`，`aHook`
+Global objects: `eHook`, `aHook`
 
- - `eHook`：包含aop劫持的基本方法 
- - `aHook`：包含 Ajax Url 劫持的基本方法
+ -`eHook`: Contains basic methods of aop hijacking
+ -`aHook`: Contains basic methods for Ajax Url hijacking
  
-## 引入方法
-1. 下载源码中的 `hooker.js` 或 `hooker-mini.js` 位于目录 `/build`，然后通过 `<script>` 标签引入，该方式引入即为全局对象：`eHook`，`aHook`
-2. npm / yarn 引入
-	```shell script
-		npm i @palerock/hooker-js
-		# 或
-		yarn add @palerock/hooker-js
-	```
-	然后通过 import 或 require 引入
-	```javascript
-		var hookJS = require('@palerock/hooker-js');
-		var eHook = hookJS.eHook;
-		var aHook = hookJS.aHook;
-		// more...
-	```
+## Introduction method
+1. Download the source code of `hooker.js` or `hooker-mini.js` in the directory `/build`, and then import it through the `<script>` tag, which is a global object: `eHook`, `aHook `
+2. Introduced by npm / yarn
+```shell script
+npm i @palerock/hooker-js
+# Or
+yarn add @palerock/hooker-js
+```
+Then import through import or require
+```javascript
+var hookJS = require('@palerock/hooker-js');
+var eHook = hookJS.eHook;
+var aHook = hookJS.aHook;
+// more...
+```
 ----------
 
-## API 文档
-### eHook对象
+## API documentation
+### eHook object
 #### `hookBefore`(parent, methodName, before, context)
 
-在指定方法前执行
+Execute before specifying method
 
 `parent`:
-类型：`object`，必须，指定方法所在的对象
+Type: `object`, required, specify the object where the method is located
 
 `methodName`:
-类型：`string`，必须，指定方法的名称
+Type: `string`, required, specify the name of the method
 
 `before`:
-类型：`function`，必须，回调方法，该方法在指定方法运行前执行
-回调参数：  
-- `method`: 指定的原方法
-- `args`: 原方法运行的参数（在此改变参数值会影响后续指定方法的参数值）
+Type: `function`, required, callback method, the method is executed before the specified method runs
+Callback parameters:
+-`method`: the specified original method
+-`args`: the parameters of the original method (change the parameter value here will affect the parameter value of the subsequent specified method)
 
-`context`:  
-类型：`object`，可选，回调方法的上下文  
+`context`:
+Type: `object`, optional, context of the callback method
 
-返回值：  
-类型：`number`，劫持id（用于解除劫持）  
+return value:  
+Type: `number`, hijack id (used to release hijack)
 
 
 ----------
 #### `hookCurrent`(parent, methodName, current, context)
-劫持方法的运行，在对制定方法进行该劫持的时候，指定方法不会主动执行，替换为执行参数中的current方法
+The operation of the hijack method, when the specified method is hijacked, the specified method will not be actively executed, and replaced with the current method in the execution parameter
 
-**注意：该方法只能对指定方法进行一次劫持，若再次使用该方法劫持就会覆盖之前的劫持[可以和hookBefore,hookAfter共存，且hookBefore和hookAfter可以对同个指定方法多次劫持]**
+**Note: This method can only hijack the specified method once. If you use this method to hijack again, it will overwrite the previous hijack [can coexist with hookBefore, hookAfter, and hookBefore and hookAfter can hijack the same specified method multiple times]* *
 
-`parent`:  
-类型：`object`，必须，指定方法所在的对象  
+`parent`:
+Type: `object`, required, specify the object where the method is located
 
-`methodName`:  
-类型：`string`，必须，指定方法的名称  
+`methodName`:
+Type: `string`, required, specify the name of the method
 
-`current`:  
-类型：`function`，必须，回调方法，该方法在指定方法被调用时执行
-回调参数及返回值：  
-- `parent`: 指定方法所在的对象，类型: `object`
-- `method`: 指定的原方法，类型: `function`
-- `args`: 原方法的参数，类型: `array`
-- `返回值`: 规定被劫持方法的返回值，类型: `*`
+`current`:
+Type: `function`, required, callback method, which is executed when the specified method is called
+Callback parameters and return value:
+-`parent`: specify the object where the method is located, type: `object`
+-`method`: The specified original method, type: `function`
+-`args`: the parameters of the original method, type: `array`
+-`Return value`: Specifies the return value of the hijacked method, type: `*`
 
-`context`:  
-类型：`object`，可选，回调方法的上下文  
+`context`:
+Type: `object`, optional, context of the callback method
 
-返回值:  
-类型：`number`，劫持id（用于解除劫持） 
+return value:  
+Type: `number`, hijack id (used to release hijack)
 
-例：  
+example:  
 ```javascript
-eHook.hookCurrent(Math, 'max', function (p, m, args) {
+eHook.hookCurrent(Math,'max', function (p, m, args) {
      return m.apply(Math, args) + 1;
 });
 console.log(Math.max(1, 8)); // 9
@@ -99,31 +99,31 @@ console.log(Math.max(1, 8)); // 9
 
 #### `hookAfter`(parent, methodName, after, context)
 
-在指定方法后执行  
+Execute after specifying the method
 
-`parent`:  
-类型：`object`，必须，指定方法所在的对象  
+`parent`:
+Type: `object`, required, specify the object where the method is located
 
-`methodName`:  
-类型：`string`，必须，指定方法的名称  
+`methodName`:
+Type: `string`, required, specify the name of the method
 
-`after`:  
-类型：`function`，必须，回调方法，该方法在指定方法运行后执行  
-回调参数及返回值：  
-- `method`: 指定的原方法，类型: `function`
-- `args`: 原方法的参数，类型: `array`
-- `result`: 原方法的返回值，类型: `*`
-- `返回值`: 规定被劫持方法的返回值，类型: `*`
+`after`:
+Type: `function`, required, callback method, which is executed after the specified method is run
+Callback parameters and return value:
+-`method`: The specified original method, type: `function`
+-`args`: the parameters of the original method, type: `array`
+-`result`: return value of the original method, type: `*`
+-`Return value`: Specifies the return value of the hijacked method, type: `*`
 
-`context`:  
-类型：`object`，可选，回调方法的上下文  
+`context`:
+Type: `object`, optional, context of the callback method
 
-返回值:  
-类型：`number`，劫持id（用于解除劫持）  
+return value:  
+Type: `number`, hijack id (used to release hijack)
 
-例：
+example:
 ```javascript
-eHook.hookAfter(Math, 'max', function (m, args, result) {
+eHook.hookAfter(Math,'max', function (m, args, result) {
      return result + 1;
 });
 console.log(Math.max(1,8)); // 9
@@ -133,40 +133,40 @@ console.log(Math.max(1,8)); // 9
 
 #### `hookReplace`(parent, methodName, replace, context)
 
-劫持替换指定方法  
+Hijacking and replacing designated methods
 
-**注意：该方法会覆盖指定劫持方法在之前所进行的一切劫持，也不能重复使用，并且不和hookAfter,hookCurrent,hookBefore共存，在同时使用的情况下，优先使用hookReplace而不是其他的方法**
+**Note: This method will cover all the previous hijacking of the specified hijacking method, and it cannot be reused, and does not coexist with hookAfter, hookCurrent, and hookBefore. In the case of simultaneous use, hookReplace is preferred over other methods* *
 
-`parent`:  
-类型：`object`，必须，指定方法所在的对象  
+`parent`:
+Type: `object`, required, specify the object where the method is located
 
-`methodName`:  
-类型：`string`，必须，指定方法的名称  
+`methodName`:
+Type: `string`, required, specify the name of the method
 
-`replace`:  
-类型：`function`，必须，回调方法，该方法的返回值便是替换的方法  
-回调参数及返回值：  
-- `method`: 指定的原方法，类型: `function`
-- `返回值`: 规定被替换的方法内容，类型: `function`
+`replace`:
+Type: `function`, required, callback method, the return value of this method is the replacement method
+Callback parameters and return value:
+-`method`: The specified original method, type: `function`
+-`Return value`: Specifies the content of the method to be replaced, type: `function`
 
-`context`:  
-类型：`object`，可选，回调方法的上下文  
+`context`:
+Type: `object`, optional, context of the callback method
 
-返回值:  
-类型：`number`，劫持id（用于解除劫持） 
+return value:  
+Type: `number`, hijack id (used to release hijack)
 
-例：  
+example:  
 ```javascript
 eHook.hookReplace(Math,'max',function (m) {
      return Math.min;
 });
 console.log(Math.max(1, 8)); // 1
 ```
-### 文档持续撰写中...
+### Document continues to be written...
 ----------
 
-## 相关地址
-- Gitee 地址：[https://gitee.com/HGJing/hooker-js](https://gitee.com/HGJing/hooker-js)
-- Github 地址 (优先更新源码)：[https://github.com/canguser/hooker-js](https://github.com/canguser/hooker-js)
-- 项目主页：[https://palerock.cn/projects/006HDUuOhBj](https://palerock.cn/projects/006HDUuOhBj)
-## 如有疑问请评论或留言
+## Related address
+-Gitee address: [https://gitee.com/HGJing/hooker-js](https://gitee.com/HGJing/hooker-js)
+-Github address (update the source code first): [https://github.com/canguser/hooker-js](https://github.com/canguser/hooker-js)
+-Project homepage: [https://palerock.cn/projects/006HDUuOhBj](https://palerock.cn/projects/006HDUuOhBj)
+## If you have any questions, please comment or leave a message
